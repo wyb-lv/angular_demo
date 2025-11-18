@@ -1,0 +1,167 @@
+<script src="home.ts"></script>
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Static Navigation</h1>
+
+  <button class="btn btn-primary mb-3" (click)="openAddModal()">
+    + Add New Item
+  </button>
+
+  <table class="table">
+    <thead class="table-info table-responsive">
+    <tr>
+      <th>No</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Price</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let i of items | async; let count = index">
+      <td>{{count+1}}</td>
+      <td>{{ i.name }}</td>
+      <td>{{ i.description }}</td>
+      <td>{{ i.price }}</td>
+      <td>
+        <button
+          class="btn btn-warning btn-sm ms-2"
+          (click)="openUpdateModal(i)"
+        >
+          Update
+        </button>
+
+        <button class="btn btn-danger btn-sm ms-2" (click)="deleteItem(i.docid!)">
+          Delete
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!--Modal Add-->
+  <div
+    class="modal fade"
+    id="addModal"
+    tabindex="-1"
+    aria-labelledby="addModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Add New Item</h5>
+          <button type="button" class="btn-close" (click)="closeAddModal()"></button>
+        </div>
+
+        <div class="modal-body">
+          <label class="form-label">Name</label>
+          <input
+            [(ngModel)]="newItemName"
+            type="text"
+            class="form-control"
+            placeholder="Item name..."
+            [ngClass]="{'is-invalid': addSubmitted && !newItemName?.trim()}"
+          />
+          <div class="invalid-feedback">
+            Name is required.
+          </div>
+
+          <label class="form-label mt-3">Description</label>
+          <textarea
+            [(ngModel)]="newItemDescription"
+            class="form-control"
+            rows="2"
+            placeholder="Description..."
+            [ngClass]="{'is-invalid': addSubmitted && !newItemDescription?.trim()}"
+          ></textarea>
+          <div class="invalid-feedback">
+            Description is required.
+          </div>
+
+          <label class="form-label mt-3">Price</label>
+          <input
+            [(ngModel)]="newItemPrice"
+            type="number"
+            class="form-control"
+            placeholder="Price..."
+            [ngClass]="{'is-invalid': addSubmitted && (!newItemPrice || newItemPrice <= 0)}"
+          />
+          <div class="invalid-feedback">
+            Price must be greater than 0.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeAddModal()">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" (click)="handleAdd()">
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--Modal Update-->
+  <div
+    class="modal fade"
+    id="updateModal"
+    tabindex="-1"
+    aria-labelledby="updateModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="updateModalLabel">Update Item</h5>
+          <button type="button" class="btn-close" (click)="closeUpdateModal()"></button>
+        </div>
+
+        <div class="modal-body">
+          <label class="form-label">Name</label>
+          <input
+            [(ngModel)]="editingName"
+            type="text"
+            class="form-control"
+            [ngClass]="{'is-invalid': updateSubmitted && !editingName?.trim()}"
+          />
+          <div class="invalid-feedback">
+            Name is required.
+          </div>
+
+          <label class="form-label mt-3">Description</label>
+          <textarea
+            [(ngModel)]="editingDescription"
+            class="form-control"
+            rows="3"
+            [ngClass]="{'is-invalid': updateSubmitted && !editingDescription?.trim()}"
+          ></textarea>
+          <div class="invalid-feedback">
+            Description is required.
+          </div>
+
+          <label class="form-label mt-3">Price</label>
+          <input
+            [(ngModel)]="editingPrice"
+            type="number"
+            class="form-control"
+            [ngClass]="{'is-invalid': updateSubmitted && (!editingPrice || editingPrice <= 0)}"
+          />
+          <div class="invalid-feedback">
+            Price must be greater than 0.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-secondary" (click)="closeUpdateModal()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" (click)="handleUpdate()">
+            Update
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
